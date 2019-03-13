@@ -12,7 +12,7 @@ All rights reserved.
 
 '''
 
-__version__ = '0.1.0'
+__version__ = '0.1.2'
 __author__ = 'oryon/dominik'
 __date__ = 'März 12, 2019'
 __updated__ = 'März 13, 2019'
