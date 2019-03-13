@@ -5,7 +5,7 @@ The pure purpose is to convert images to .txt files via GUI - no special cases a
 
 ## Installation
 
-Windows Users can download the [executable](https://github.com/oryon-dominik/) and run the program as a standalone.
+Windows Users can download the [executable](https://github.com/oryon-dominik/tesseract_simple_gui/blob/master/tss_simple.exe) and run the program as a standalone.
 Other OSs have to compile for themselves or just use the script.
 
 A valid installation of tesseract in your path-environment is required.
