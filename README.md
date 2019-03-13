@@ -3,9 +3,11 @@
 A very simple graphical User Interface for the OCR-Software [Tesseract](https://github.com/tesseract-ocr/tesseract) written in Python
 The pure purpose is to convert images to .txt files via GUI - no special cases are adressed. Feel free to request features though.
 
+![Example Screenshot](/screenshot/tss_simple_screen01.png?raw=true "Screenshot")
+
 ## Installation
 
-Windows Users can download the [executable](https://github.com/oryon-dominik/tesseract_simple_gui/blob/master/tss_simple.exe) and run the program as a standalone.
+Windows Users can download the [executable](https://github.com/oryon-dominik/tesseract_simple_gui/blob/master/tss_simple.exe) and run the program as a standalone. (Don't forget to include the `lang.json` and the `tss_simple.ico` or the program will crash)
 Other OSs have to compile for themselves or just use the script.
 
 A valid installation of tesseract in your path-environment is required.
