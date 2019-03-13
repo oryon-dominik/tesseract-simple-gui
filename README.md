@@ -31,7 +31,7 @@ Should be pretty self-explanatory:
 
 ## Languages
 
-Modify or create the file `lang.json` in the executables directory with the language abbrevation and the encoding (see example) you want to use.
+Modify or create the file `lang.json` in the executables directory with the language abbreviation and the encoding (see example) you want to use.
 Obviously the language has to be already installed with tesseract. (Check for `.traineddata`-files in `...\Tesseract-OCR\tessdata`)
 
 Example `lang.json`:
