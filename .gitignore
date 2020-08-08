@@ -1,0 +1,17 @@
+## GIT is ignoring... 
+
+# vscode/settings
+tesseract-gui.code-workspace
+
+# pyinstaller
+build/
+dist/
+tss_simple.spec
+
+# examples & clutter
+examples/*
+
+### Python ###
+# precompiled
+__pycache__/
+*.py[cod]
