@@ -27,34 +27,38 @@ pyinstaller.exe --onefile --icon=tss_simple.ico --clean tss_simple.py
 import os
 import subprocess
 from pathlib import Path
-from json import load
-from shutil import which
+import json
+import shutil
 
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import scrolledtext
 
 
-class Tesseract_GUI(tk.Frame):
+class TesseractGUI(tk.Frame):
 
     status = None
     tesseract = None
 
     def __init__(self, master=None):
-        super(Tesseract_GUI, self).__init__(master)
+        super().__init__(master)
         self.parent = master
         self.filename = None
         self.text = "Optical character recognition from image to text via 'Tesseract'\nOutput-File will be created as .txt in the same folder as origin"
         self.language, self.encoding = self.get_language_encoding()
         self.status = self.set_status()
         self.selected = tk.StringVar()
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         # Set-up basics
         self.parent.title("Tesseract Simple GUI")
-        self.parent.geometry("{}x{}".format(380, 550))
-        self.parent.wm_iconbitmap("tss_simple.ico")
+        self.parent.geometry(f"{380}x{550}")
+        try:
+            self.parent.wm_iconbitmap("tss_simple.ico")
+        except tk.TclError:
+            # just skip the icon
+            pass
         # Set-up Grid-Geometry
         self.configure_grid()
         # Populate the Grid
@@ -118,22 +122,24 @@ class Tesseract_GUI(tk.Frame):
         self.output.pack(fill=tk.BOTH, padx=2, pady=2, expand=True)
         self.status_label.pack(fill=tk.BOTH, padx=2, pady=2, expand=True)
 
-    def get_status(self):
+    def get_status(self, fallback_status=None):
         if self.status is None:
             # Initializing..
             # TODO: check for issues & errors and display here
-            if which("tesseract") is None:  # shutil.which
-                self.status = (
-                    "Status: " + "Did not found a valid Tesseract Installation"
-                )
+            if shutil.which("tesseract") is None:
+                self.status = "Status: Did not find a valid Tesseract Installation"
                 self.tesseract = False
                 return self.status
-            elif which("tesseract") is not None:
+            elif shutil.which("tesseract") is not None:
                 self.tesseract = True
-            self.status = "Status: " + "Waiting for file"
+            self.status = "Status: Waiting for file"
             return self.status
         else:
-            self.status = self.status_label["text"]
+            # if lang.json is not found, this get's called before init
+            try:
+                self.status = self.status_label["text"]
+            except AttributeError:  
+                self.status = fallback_status
             return self.status
 
     def set_status(self, status=None):
@@ -141,7 +147,10 @@ class Tesseract_GUI(tk.Frame):
         if status is None:
             return self.get_status()
         else:
-            self.status_label.config(text=str(status))
+            try:
+                self.status_label.config(text=str(status))
+            except AttributeError:
+                self.get_status(fallback_status=status)
             return self.get_status()
 
     def choose_file(self):
@@ -157,8 +166,7 @@ class Tesseract_GUI(tk.Frame):
         )
         if self.filename:
             self.set_status("File selected")  # TODO: check for file validity
-            seperator = "/"  # TODO: handle os-seperators
-            short_fhandle = str(self.filename).split(seperator)[-1]
+            short_fhandle = str(self.filename).split(os.path.sep)[-1]
             self.selected.set(short_fhandle)
         else:
             self.set_status("Please select a file")
@@ -169,24 +177,20 @@ class Tesseract_GUI(tk.Frame):
         folder = os.getcwd()
         seperator = os.path.sep
 
-        file_path = "{}{}{}".format(folder, seperator, _file)
+        file_path = Path(f"{folder}{seperator}{_file}")
 
-        if not Path("{}".format(file_path)).is_file():
+        if not file_path.exists() or not file_path.is_file():
             self.set_status("Language-File not found - using english")
             return "eng", "utf-8"
 
         else:
-            with open(file_path, "r") as settings_file:
+            with open(file_path, "r") as f:
                 try:
-                    json = load(settings_file)  # json.load
-                    return json["language"], json["encoding"]
+                    settings = json.load(f)
+                    return settings["language"], settings["encoding"]
 
-                except Exception as err:
-                    self.set_status(
-                        "Language-File Importing-Error {} - using english & utf-8".format(
-                            err
-                        )
-                    )
+                except Exception as e:
+                    self.set_status(f"Language-File Importing-Error {e} - using english & utf-8")
                     return "eng", "utf-8"
 
     def convert(self):
@@ -209,7 +213,7 @@ class Tesseract_GUI(tk.Frame):
                     process, stdout=subprocess.DEVNULL
                 )  # TODO: catch output and exceptions
 
-                scanned_text = self.read_text("{}.txt".format(outputname))
+                scanned_text = self.read_text(f"{outputname}.txt")
 
                 self.output.delete("1.0", tk.END)
                 self.output.insert(tk.END, scanned_text)
@@ -222,7 +226,7 @@ class Tesseract_GUI(tk.Frame):
 
             except Exception as e:
                 error = True
-                self.set_status("Error: {}".format(e))
+                self.set_status(f"Error: {e}")
         else:
             if not self.tesseract:
                 self.set_status("No Tesseract Installation found - can't convert image")
@@ -234,17 +238,15 @@ class Tesseract_GUI(tk.Frame):
             try:
                 text = _file.read()
                 return str(text).lstrip()
-            except Exception as err:
-                return "Text-File Importing-Error: {}".format(err)
+            except Exception as e:
+                return f"Text-File Importing-Error: {e}"
 
 
 def main():
-
     root = tk.Tk()
-    app = Tesseract_GUI(root)
+    app = TesseractGUI(root)
     app.mainloop()
 
 
 if __name__ == "__main__":
-
     main()
