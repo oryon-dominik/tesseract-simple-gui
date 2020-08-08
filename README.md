@@ -8,7 +8,7 @@ The pure purpose is to convert images to .txt files via GUI - no special cases a
 
 ## Installation
 
-Windows Users can download the [executable](https://github.com/oryon-dominik/tesseract_simple_gui/blob/master/tss_simple.exe) and run the program as a standalone. (Don't forget to include the `lang.json` and the `tss_simple.ico` in the exe's directory or the program will crash)
+Windows Users can download the [executable](https://github.com/oryon-dominik/tesseract_simple_gui/blob/master/tss_simple.exe) and run the program as a standalone.
 
 Other OSs have to compile for themselves or just use the script.
 
