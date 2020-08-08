@@ -7,15 +7,15 @@ A seperate tesseract installation is required.
 See: https://github.com/tesseract-ocr/tesseract
 
 This script is licensed under the revised BSD License (see LICENSE)
-Copyright (c) 2019-present Dominik Geldmacher <oryon@soila.de>
+Copyright (c) 2019-present Dominik Geldmacher <oryon@cyberise.de>
 All rights reserved.
 
 '''
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 __author__ = 'oryon/dominik'
-__date__ = 'März 12, 2019'
-__updated__ = 'März 13, 2019'
+__date__ = 'March 12, 2019'
+__updated__ = 'August 8, 2020'
 
 
 """
